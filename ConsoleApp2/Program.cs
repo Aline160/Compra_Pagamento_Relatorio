@@ -15,7 +15,7 @@ namespace ConsoleApp2
             {
                 Console.WriteLine("================== Loja das meninas da Gama Academy ============================");
                 Console.WriteLine("Selecione uma opção");
-                Console.WriteLine("1-Compra | 2-Pagamento | 3-Relatório");
+                Console.WriteLine("1-Compra | 2-Pagamento |3-Pagamento_Dinheiro | 4-Relatório");
 
                 var opcao = int.Parse(Console.ReadLine());
 
@@ -28,6 +28,9 @@ namespace ConsoleApp2
                         Pagamento();
                         break;
                     case 3:
+                        PagamentoAVista();
+                        break;
+                    case 4:
                         Relatorio();
                         break;
                     default:
@@ -84,6 +87,30 @@ namespace ConsoleApp2
 
             boleto.Pagar();
             Console.WriteLine($"Boleto de código {numero} foi pago com sucesso");
+        }
+
+        public static void PagamentoAVista()
+        {
+            Console.WriteLine("Digite o código de barras:");
+            Guid numero = Guid.Parse(Console.ReadLine());
+
+            var boleto = listaBoletos
+                            .Where(item => item.CodigoBarra == numero)
+                            .FirstOrDefault();
+
+            if (boleto is null)
+            {
+                Console.WriteLine($"Boleto de código {numero} não encontrado!");
+            }
+
+            Console.WriteLine("Informe o valor da compra: ");
+            decimal valorCompra = Decimal.Parse(Console.ReadLine());
+
+            Console.WriteLine("Informe o valor recebido: ");
+            decimal valorRecebido = Decimal.Parse(Console.ReadLine());
+
+            var pagamentoAvista = new Dinheiro(valorCompra, valorRecebido);
+            pagamentoAvista.PagarAVista();
         }
 
         public static void Relatorio()
